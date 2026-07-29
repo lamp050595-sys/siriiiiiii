@@ -1,0 +1,22 @@
+name: Build iOS dylib
+
+on:
+  workflow_dispatch: # Cho phép bạn bấm nút kích hoạt chạy thủ công trên điện thoại
+
+jobs:
+  build:
+    runs-on: macos-latest # Sử dụng môi trường macOS tích hợp sẵn Xcode của GitHub
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Compile Objective-C to iOS dylib
+      run: |
+        xcrun -sdk iphoneos clang -dynamiclib -arch arm64 -framework Foundation bypassEnti.m -o bypassEnti.dylib
+
+    - name: Upload Binary Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: bypassEnti-dylib
+        path: bypassEnti.dylib
